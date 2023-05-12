@@ -19,7 +19,7 @@ async function doFetch({
     const buildNumber = `${githubContext.run_id}`;
     const attemptNumber = `${githubContext.run_attempt}`;
 
-    const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
+    const endpoint = `${instanceUrl}/api/sn_devops/v1/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
     
     let response = {};
     let status = false;
@@ -93,8 +93,11 @@ async function doFetch({
               console.log('\n \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
             }
             throw new Error(JSON.stringify({ "statusCode": "201", "details": currChangeDetails }));
-          } else if((changeState == "failed")||(changeState == "error")) {
-              throw new Error(JSON.stringify({ "status":"error","details": currChangeDetails.details }));
+          } else if((changeState == "failed") || (changeState == "error") || (changeState == 'rejected')) {
+            if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
+              console.log('\n \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m'); 
+            }
+            throw new Error(JSON.stringify({ "status":"error","details": currChangeDetails.details }));
           } else
             throw new Error("202");
         }
