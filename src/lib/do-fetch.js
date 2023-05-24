@@ -93,17 +93,19 @@ async function doFetch({
               console.log('\n \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
             }
             throw new Error(JSON.stringify({ "statusCode": "201", "details": currChangeDetails }));
-          } else if((changeState == "failed") || (changeState == "error") || (changeState == 'rejected')) {
+          } else if((changeState == "failed") || (changeState == "error")) {
+            throw new Error(JSON.stringify({ "status":"error","details": currChangeDetails.details }));
+          } else if(changeState == "rejected" || changeState == "approved"){
             if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
               console.log('\n \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m'); 
             }
-            throw new Error(JSON.stringify({ "status":"error","details": currChangeDetails.details }));
-          } else
-            throw new Error("202");
-        }
-
-        if (responseCode == 200) {
-            console.log('\n****Change is Approved.');
+              if(changeState == "rejected"){
+                throw new Error("202");
+              }
+              else if(responseCode == 200){
+                console.log('\n****Change is Approved.');
+              }
+          }
         }
     } else
         throw new Error("500");
