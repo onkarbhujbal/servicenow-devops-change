@@ -58,7 +58,7 @@ async function createChange({
     let response;
     let status = false;
 
-    while (attempts < 3) {
+    //while (attempts < 3) {
         try {
             ++attempts;
             const token = `${username}:${passwd}`;
@@ -72,7 +72,7 @@ async function createChange({
             let httpHeaders = { headers: defaultHeaders,  timeout: changeCreationTimeOut };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
-            break;
+            //break;
         } catch (err) {
             if (err.code === 'ECONNABORTED') {
                 throw new Error(`change creation timeout after ${err.config.timeout}s`);
@@ -112,14 +112,14 @@ async function createChange({
                 }
                 if (errMsg.indexOf('callbackURL') == -1)
                     throw new Error(errMsg);
-                else if (attempts >= 3) {
+                /*else if (attempts >= 3) {
                     errMsg = 'Task/Step Execution not created in ServiceNow DevOps for this job/stage ' + jobname + '. Please check Inbound Events processing details in ServiceNow instance and ServiceNow logs for more details.';
                     throw new Error(errMsg);
-                }
+                }*/
             }
-            await new Promise((resolve) => setTimeout(resolve, 30000));
+            //await new Promise((resolve) => setTimeout(resolve, 30000));
         }
-    }
+    //}
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
