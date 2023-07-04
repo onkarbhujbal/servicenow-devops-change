@@ -11,8 +11,7 @@ async function doFetch({
   githubContextStr,
   prevPollChangeDetails
 }) {
-
-
+  
   let githubContext = JSON.parse(githubContextStr);
 
   const codesAllowedArr = '200,201,400,401,403,404,500'.split(',').map(Number);
