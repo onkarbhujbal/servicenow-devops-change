@@ -56,6 +56,7 @@ const main = async() => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
+      let startTime = +new Date();
       let prevPollChangeDetails = {};
 
       response = await tryFetch({
@@ -72,7 +73,8 @@ const main = async() => {
         abortOnChangeStepTimeout,
         prevPollChangeDetails,
         changeCreationTimeOut,
-        abortOnChangeCreationFailure
+        abortOnChangeCreationFailure,
+        startTime
       });
 
     }

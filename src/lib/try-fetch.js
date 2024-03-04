@@ -15,11 +15,12 @@ async function tryFetch({
   abortOnChangeStepTimeout,
   prevPollChangeDetails,
   changeCreationTimeOut,
-  abortOnChangeCreationFailure
+  abortOnChangeCreationFailure,
+  startTime
 }) {
     try {
         await doFetch({
-          start,
+          startTime,
           instanceUrl,
           toolId,
           username,

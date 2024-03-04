@@ -5967,7 +5967,7 @@ const core = __nccwpck_require__(4435);
 const axios = __nccwpck_require__(4976);
 
 async function doFetch({
-  startTime = +new Date(),
+  startTime,
   instanceUrl,
   toolId,
   username,
@@ -6165,11 +6165,12 @@ async function tryFetch({
   abortOnChangeStepTimeout,
   prevPollChangeDetails,
   changeCreationTimeOut,
-  abortOnChangeCreationFailure
+  abortOnChangeCreationFailure,
+  startTime
 }) {
     try {
         await doFetch({
-          start,
+          startTime,
           instanceUrl,
           toolId,
           username,
@@ -6476,6 +6477,7 @@ const main = async() => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
+      let startTime = +new Date();
       let prevPollChangeDetails = {};
 
       response = await tryFetch({
@@ -6492,7 +6494,8 @@ const main = async() => {
         abortOnChangeStepTimeout,
         prevPollChangeDetails,
         changeCreationTimeOut,
-        abortOnChangeCreationFailure
+        abortOnChangeCreationFailure,
+        startTime
       });
 
     }

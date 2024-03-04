@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const axios = require('axios');
 
 async function doFetch({
-  startTime = +new Date(),
+  startTime,
   instanceUrl,
   toolId,
   username,
