@@ -98,7 +98,8 @@ async function tryFetch({
           abortOnChangeStepTimeout,
           prevPollChangeDetails,
           changeCreationTimeOut,
-          abortOnChangeCreationFailure
+          abortOnChangeCreationFailure,
+          startTime
         });
     }
 }
