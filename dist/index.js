@@ -5967,7 +5967,7 @@ const core = __nccwpck_require__(4435);
 const axios = __nccwpck_require__(4976);
 
 async function doFetch({
-  startTime,
+  startTime = +new Date(),
   instanceUrl,
   toolId,
   username,
@@ -6113,7 +6113,8 @@ async function doFetch({
               console.log('\n \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
             }
             throw new Error("202");
-        }
+        } else
+           throw new Error("201");
       }
       else if (responseCode == 200) {
           if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
