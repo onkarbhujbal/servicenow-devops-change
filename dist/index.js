@@ -5967,7 +5967,7 @@ const core = __nccwpck_require__(4435);
 const axios = __nccwpck_require__(4976);
 
 async function doFetch({
-  startTime,
+  startTime = +new Date(),
   instanceUrl,
   toolId,
   username,
@@ -6077,8 +6077,8 @@ async function doFetch({
 
       //Check for changeCreationTimeOut
       if(Object.keys(currChangeDetails).length === 0) {
-        console.log("inside this object keys" + changeCreationTimeOut);
-        if (+new Date() - startTime > changeCreationTimeOut * 1000) {
+        console.log("inside this object keys " + changeCreationTimeOut + " abortOnChangeCreationFailure = " + abortOnChangeCreationFailure);
+        if ((+new Date() - startTime) > (changeCreationTimeOut * 1000)) {
           if (abortOnChangeCreationFailure) {
              let errMsg = `Timeout after ${changeCreationTimeOut} seconds.Workflow execution is aborted since abortOnChangeCreationFailure flag is true`;
              throw new Error(JSON.stringify({ "status": "error", "details": errMsg }));
