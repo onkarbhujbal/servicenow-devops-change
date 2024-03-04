@@ -92,6 +92,7 @@ async function doFetch({
   }
 
   if (status) {
+      console.log("inside status dofetch");
       try {
         responseCode = response.status;
       } catch (error) {
@@ -109,15 +110,9 @@ async function doFetch({
       let currChangeDetails = changeStatus.details;
       let changeState = currChangeDetails.status;
 
-      if (currChangeDetails) {
-        if (currChangeDetails.number)
-          core.setOutput('change-request-number', currChangeDetails.number);
-        if (currChangeDetails.sys_id)
-          core.setOutput('change-request-sys-id', currChangeDetails.sys_id);
-      }
-
       //Check for changeCreationTimeOut
       if(Object.keys(currChangeDetails).length === 0) {
+        console.log("inside this object keys" + changeCreationTimeOut);
         if (+new Date() - startTime > changeCreationTimeOut * 1000) {
           if (abortOnChangeCreationFailure) {
              let errMsg = `Timeout after ${changeCreationTimeOut} seconds.Workflow execution is aborted since abortOnChangeCreationFailure flag is true`;
@@ -128,6 +123,13 @@ async function doFetch({
              throw new Error("ChangeCreationFailure");
           }
         }
+      }
+
+      if (currChangeDetails) {
+        if (currChangeDetails.number)
+          core.setOutput('change-request-number', currChangeDetails.number);
+        if (currChangeDetails.sys_id)
+          core.setOutput('change-request-sys-id', currChangeDetails.sys_id);
       }
 
       if (responseCode == 201) {
