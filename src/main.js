@@ -34,19 +34,11 @@ const main = async() => {
         jobname,
         githubContextStr,
         changeRequestDetailsStr,
-        changeCreationTimeOut,
         deploymentGateStr
       });
     } catch (err) {
-      if (abortOnChangeCreationFailure) {
         status = false;
         core.setFailed(err.message);
-      }
-      else { 
-        console.error("creation failed with error message ," + err.message);
-        console.log('\n  \x1b[38;5;214m Workflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;214m');
-        return;
-      }
     }
 
     if (deploymentGateStr)
@@ -77,12 +69,14 @@ const main = async() => {
         jobname,
         githubContextStr,
         abortOnChangeStepTimeout,
-        prevPollChangeDetails
+        prevPollChangeDetails,
+        changeCreationTimeOut,
+        abortOnChangeCreationFailure
       });
 
     }
   } catch (error) {
-    core.setFailed(error.message);
+        core.setFailed(error.message);
   }
 }
 

@@ -13,10 +13,14 @@ async function tryFetch({
   jobname,
   githubContextStr,
   abortOnChangeStepTimeout,
-  prevPollChangeDetails
+  prevPollChangeDetails,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
 }) {
     try {
+        let startTime = +new Date();
         await doFetch({
+          startTime,
           instanceUrl,
           toolId,
           username,
@@ -24,7 +28,9 @@ async function tryFetch({
           token,
           jobname,
           githubContextStr,
-          prevPollChangeDetails
+          prevPollChangeDetails,
+          changeCreationTimeOut,
+          abortOnChangeCreationFailure
         });
     } catch (error) {
         if (error.message == "500") {
@@ -49,6 +55,10 @@ async function tryFetch({
 
         if (error.message == "202") {
           throw new Error("****Change has been created but the change is either rejected or cancelled.");
+        }
+
+        if(error.message == "ChangeCreationFailure") {
+          return;
         }
 
         const errorMessage = error.message;
@@ -86,7 +96,9 @@ async function tryFetch({
           jobname,
           githubContextStr,
           abortOnChangeStepTimeout,
-          prevPollChangeDetails
+          prevPollChangeDetails,
+          changeCreationTimeOut,
+          abortOnChangeCreationFailure
         });
     }
 }
