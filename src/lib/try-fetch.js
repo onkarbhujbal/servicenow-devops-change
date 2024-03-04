@@ -18,9 +18,8 @@ async function tryFetch({
   abortOnChangeCreationFailure
 }) {
     try {
-        let startTime = +new Date();
         await doFetch({
-          startTime,
+          start,
           instanceUrl,
           toolId,
           username,
@@ -57,7 +56,7 @@ async function tryFetch({
           throw new Error("****Change has been created but the change is either rejected or cancelled.");
         }
 
-        if(error.message == "ChangeCreationFailure") {
+        if (error.message == "ChangeCreationFailure") {
           return;
         }
 

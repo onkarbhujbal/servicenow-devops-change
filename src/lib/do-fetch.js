@@ -113,13 +113,15 @@ async function doFetch({
       //Check for changeCreationTimeOut
       if(Object.keys(currChangeDetails).length === 0) {
         var val = (+new Date() - startTime);
-        console.log("inside this object keys " + changeCreationTimeOut + " abortOnChangeCreationFailure = " + abortOnChangeCreationFailure + " timeout = " + val);
+        console.log("inside this object keys " + changeCreationTimeOut + " abortOnChangeCreationFailure = " + abortOnChangeCreationFailure + " timeout = " + val + " changeStatus " + JSON.stringify(changeStatus) + "responseCode = " + responseCode);
         if ((+new Date() - startTime) > (changeCreationTimeOut * 1000)) {
+          console.log("inside data filter");
           if (abortOnChangeCreationFailure) {
              let errMsg = `Timeout after ${changeCreationTimeOut} seconds.Workflow execution is aborted since abortOnChangeCreationFailure flag is true`;
              throw new Error(JSON.stringify({ "status": "error", "details": errMsg }));
           }
           else { 
+             console.log("inside data filter");
              console.error('\n    \x1b[38;5;214m Timeout occured after '+changeCreationTimeOut+' seconds but pipeline will coninue since abortOnChangeCreationFailure flag is false \x1b[38;5;214m');
              throw new Error("ChangeCreationFailure");
           }
