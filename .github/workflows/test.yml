@@ -10,37 +10,40 @@ jobs:
     #needs: <upstream job>
     runs-on: ubuntu-latest
     steps:    
-        - name: ServiceNow Change
-          run: |
-            curl -X POST https://dev225239.service-now.com/api/now/table/change_request \
-            -H "Content-Type: application/json" \
-            -u ${{ secrets.SN_DEVOPS_USER }}:${{ secrets.SN_DEVOPS_PASSWORD }} \
-            -d '{
-                  "short_description": "Automated Software Deployment",
-                  "description": "Automated Software Deployment.",
-                  "assignment_group": "3D679434f053231300e321ddeeff7b12d8",  # Make sure this group ID exists
-                  "implementation_plan": "Software update is tested and results can be found in Test Summaries Tab. When the change is approved, the implementation happens automatically in the CI/CD pipeline within the planned start and end time window.",
-                  "backout_plan": "If software fails in production, the previous software release will be re-deployed.",
-                  "test_plan": "Testing if the software was successfully deployed",
-                  "category": "Software",
-                  "change_type": "Normal",
-                  "priority": "2",
-                  "state": "New"
-                }'
-        - name: ServiceNow Change
-          uses: ServiceNow/servicenow-devops-change@v4.0.0
-          with:
-            devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-            devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-            instance-url: ${{ secrets.SN_INSTANCE_URL }}
-            tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-            context-github: ${{ toJSON(github) }}
-            job-name: 'Deploy'
-            change-request: '{"setCloseCode":"true","autoCloseChange":true,"attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
-            interval: '100'
-            timeout: '3600'
-            changeCreationTimeOut: '3600'
-            abortOnChangeCreationFailure: true
-            abortOnChangeStepTimeout: true
-        - name: Output of Change Creation
-          run: echo "change-request-number = ${{ steps.create.outputs.change-request-number }}" >> $GITHUB_OUTPUT
+
+      - name: Create Change request with API call
+        run: |
+          curl -X POST https://dev225239.service-now.com/api/now/table/change_request \
+          -H "Content-Type: application/json" \
+          -u ${{ secrets.SN_DEVOPS_USER }}:${{ secrets.SN_DEVOPS_PASSWORD }} \
+          -d '{
+                "short_description": "Automated Software Deployment",
+                "description": "Automated Software Deployment.",
+                "assignment_group": "3D679434f053231300e321ddeeff7b12d8",
+                "implementation_plan": "Software update is tested and results can be found in Test Summaries Tab. When the change is approved, the implementation happens automatically in the CI/CD pipeline within the planned start and end time window.",
+                "backout_plan": "If software fails in production, the previous software release will be re-deployed.",
+                "test_plan": "Testing if the software was successfully deployed",
+                "category": "Software",
+                "change_type": "Normal",
+                "priority": "2",
+                "state": "New",
+                "auto_close_change": true,
+                "setCloseCode": "True"
+              }'
+          - name: ServiceNow Change
+            uses: ServiceNow/servicenow-devops-change@v4.0.0
+            with:
+              devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
+              devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
+              instance-url: ${{ secrets.SN_INSTANCE_URL }}
+              tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+              context-github: ${{ toJSON(github) }}
+              job-name: 'Deploy'
+              change-request: '{"setCloseCode":"true","autoCloseChange":true,"attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
+              interval: '100'
+              timeout: '3600'
+              changeCreationTimeOut: '3600'
+              abortOnChangeCreationFailure: true
+              abortOnChangeStepTimeout: true
+          - name: Output of Change Creation
+            run: echo "change-request-number = ${{ steps.create.outputs.change-request-number }}" >> $GITHUB_OUTPUT
