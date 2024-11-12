@@ -1,6 +1,5 @@
 name: Test
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -59,7 +58,6 @@ on:
       main: 'dist/index.js'
 
 jobs:
-
   deploy:
     name: Deploy
     #needs: <upstream job>
