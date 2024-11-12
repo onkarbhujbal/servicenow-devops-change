@@ -51,12 +51,6 @@ on:
       deployment-gate:
         description: 'The customized inputs to process deployment gate job related change.'
         required: false
-      branding:
-      icon: 'refresh-ccw'
-      color: 'green'
-      runs: 
-      using: 'node16'
-      main: 'dist/index.js'
 
 jobs:
   deploy:
