@@ -12,7 +12,7 @@ jobs:
     steps:    
         - name: ServiceNow Change
           run: |
-            curl -X POST https://${{ SN_INSTANCE_URL }}/api/now/table/change_request \
+            curl -X POST https://dev225239.service-now.com/api/now/table/change_request \
             -H "Content-Type: application/json" \
             -u ${{ secrets.SN_DEVOPS_USER }}:${{ secrets.SN_DEVOPS_PASSWORD }} \
             -d '{
