@@ -1,0 +1,21 @@
+name: Trigger on ServiceNow Approval
+
+on:
+  repository_dispatch:
+    types:
+      - approval_triggered
+
+jobs:
+  approval_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print approval details
+        run: |
+          echo "Approval Record ID: ${{ github.event.client_payload.approval_record_id }}"
+          echo "Approved By: ${{ github.event.client_payload.approved_by }}"
+      
+      # Add more steps to perform any actions based on approval here
